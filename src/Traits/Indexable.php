@@ -2,22 +2,26 @@
 
 namespace BinaryTorch\LaRecipe\Traits;
 
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\DomCrawler\Crawler;
 
 trait Indexable
 {
     /**
-     * @param  $version
      * @return mixed
      */
-    public function index($version)
+    public function index()
     {
-        return $this->cache->remember(function () use ($version) {
-            $pages = $this->getPages($version);
+        return $this->cache->remember(function () {
+            $pages = $this->getPages();
 
             $result = [];
             foreach($pages as $page) {
-                $page = explode("{{version}}", $page)[1];
+                preg_match('/(?<=docs\/)(.*)(?=\/)/', $page, $versionMatches);
+                $version = explode("/", $versionMatches[0])[0];
+
+                $page = substr($page, strpos($page, '/', 6));
+
                 $pageContent = $this->get($version, $page);
 
                 if(! $pageContent)
@@ -38,6 +42,7 @@ trait Indexable
                         });
                 
                 $result[] = [
+                    'version'  => $version,
                     'path'     => $page,
                     'title'    => $title ? $title[0] : '',
                     'headings' => $nodes
@@ -45,20 +50,36 @@ trait Indexable
             }
 
             return $result;
-        }, 'larecipe.docs.'.$version.'.search');
+        }, 'larecipe.docs.search');
     }
 
     /**
      * @param  $version
      * @return mixed
      */
-    protected function getPages($version)
+    protected function getPages()
     {
-        $path = base_path(config('larecipe.docs.path').'/'.$version.'/index.md');
+        $versions = config('larecipe.versions.published');
 
-        // match all markdown urls => [title](url)
-        preg_match_all('/\(([^)]+)\)/', $this->files->get($path), $matches);
+        $paths = [];
+        foreach ($versions as $version) {
+            array_push($paths, base_path(config('larecipe.docs.path') . '/' . $version . '/index.md'));
+        }
 
-        return $matches[1];
+        $allMatches = [];
+        foreach ($paths as $path) {
+            preg_match('/(?<=docs\/)(.*)(?=\/)/', $path, $versionMatches);
+            $version = $versionMatches[0];
+
+            preg_match_all('/\(([^)#]+)\)/', $this->files->get($path), $matches);
+
+            $links = [];
+            foreach ($matches[1] as $match) {
+                array_push($links, str_replace('{{version}}', $version, $match));
+            }
+            array_push($allMatches, $links);
+        }
+
+        return array_unique(array_merge(...$allMatches));
     }
 }
