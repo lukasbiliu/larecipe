@@ -6,7 +6,7 @@
         class="form-control outline-none internal-search-input text-center"/>
     <div class="internal-autocomplete-result">
       <ul v-if="filteredPages.length">
-        <li :key="index" v-for="(page, index) in filteredPages">
+        <li v-for="(page, index) in filteredPages" :key="index" >
           <a :href="'/docs/' + page.version + page.path">
             <span class="page-title">
               <b>{{ page.title }}</b>
@@ -79,9 +79,7 @@ export default {
   },
   computed: {
     filteredPages() {
-      console.log("Filtered pages: ", this.pages);
-
-      let result = this.pages.filter(page => {
+      return this.pages.filter(page => {
         let foundInHeading = false;
 
         page.headings.forEach(heading => {
@@ -92,9 +90,6 @@ export default {
 
         return page.title.toLowerCase().includes(this.search) || foundInHeading;
       });
-
-      console.log("Filtered result: ", result);
-
     }
   },
   mounted() {
