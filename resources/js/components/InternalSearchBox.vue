@@ -4,7 +4,7 @@
         v-model="search"
         placeholder="Search..."
         class="form-control outline-none internal-search-input text-center"/>
-
+    {{search}}
     <div class="internal-autocomplete-result">
       <ul v-if="filteredPages.length">
         <li v-for="page in filteredPages" :key="page.path">
@@ -81,7 +81,9 @@ export default {
   },
   computed: {
     filteredPages() {
-      return this.pages.filter(page => {
+      console.log("Filtered pages: ", this.pages);
+
+      let result = this.pages.filter(page => {
         let foundInHeading = false;
 
         page.headings.forEach(heading => {
@@ -92,6 +94,9 @@ export default {
 
         return page.title.toLowerCase().includes(this.search) || foundInHeading;
       });
+
+      console.log("Filtered result: ", result);
+
     }
   },
   mounted() {
