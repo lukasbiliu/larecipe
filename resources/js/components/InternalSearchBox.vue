@@ -4,11 +4,10 @@
         v-model="search"
         placeholder="Search..."
         class="form-control outline-none internal-search-input text-center"/>
-
     <div class="internal-autocomplete-result">
       <ul v-if="filteredPages.length">
-        <li v-for="page in filteredPages" :key="page.path">
-          <a :href="versionUrl + page.path">
+        <li v-for="page in filteredPages">
+          <a :href="'/docs/' + page.version + page.path">
             <span class="page-title">
               <b>{{ page.title }}</b>
             </span>
@@ -17,10 +16,9 @@
           <hr>
 
           <p
-            class="heading"
-            v-for="heading in page.headings"
-            :key="heading"
-            @click="navigateToHeading(page, heading)"
+             @click="navigateToHeading(page, heading)"
+             class="heading"
+             v-for="heading in page.headings"
           >{{ heading }}</p>
         </li>
       </ul>
