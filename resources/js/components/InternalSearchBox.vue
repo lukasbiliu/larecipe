@@ -6,7 +6,7 @@
         class="form-control outline-none internal-search-input text-center"/>
     <div class="internal-autocomplete-result">
       <ul v-if="filteredPages.length">
-        <li v-for="page in filteredPages">
+        <li v-for="(page, pageKey) in filteredPages" :key="pageKey">
           <a :href="'/docs/' + page.version + page.path">
             <span class="page-title">
               <b>{{ page.title }}</b>
@@ -18,7 +18,8 @@
           <p
              @click="navigateToHeading(page, heading)"
              class="heading"
-             v-for="heading in page.headings"
+             v-for="(heading, headingKey) in page.headings"
+             :key="headingKey"
           >{{ heading }}</p>
         </li>
       </ul>
