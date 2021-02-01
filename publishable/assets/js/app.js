@@ -27526,7 +27526,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "internal-search-box",
@@ -27633,24 +27632,28 @@ var render = function() {
         _vm.filteredPages.length
           ? _c(
               "ul",
-              _vm._l(_vm.filteredPages, function(page) {
+              _vm._l(_vm.filteredPages, function(page, pageKey) {
                 return _c(
                   "li",
-                  { key: page.path },
+                  { key: pageKey },
                   [
-                    _c("a", { attrs: { href: _vm.versionUrl + page.path } }, [
-                      _c("span", { staticClass: "page-title" }, [
-                        _c("b", [_vm._v(_vm._s(page.title))])
-                      ])
-                    ]),
+                    _c(
+                      "a",
+                      { attrs: { href: "/docs/" + page.version + page.path } },
+                      [
+                        _c("span", { staticClass: "page-title" }, [
+                          _c("b", [_vm._v(_vm._s(page.title))])
+                        ])
+                      ]
+                    ),
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._l(page.headings, function(heading) {
+                    _vm._l(page.headings, function(heading, headingKey) {
                       return _c(
                         "p",
                         {
-                          key: heading,
+                          key: headingKey,
                           staticClass: "heading",
                           on: {
                             click: function($event) {
