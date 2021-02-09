@@ -27546,7 +27546,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     navigateToHeading: function navigateToHeading(page, heading) {
-      window.location = this.versionUrl + page.path + "#" + this.slugify(heading);
+      window.location = '/docs/' + page.version + page.path + "#" + this.slugify(heading);
     },
     slugify: function slugify(heading) {
       return heading.toString().toLowerCase().replace(/\s+/g, "-");

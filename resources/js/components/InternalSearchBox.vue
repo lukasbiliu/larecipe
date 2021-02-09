@@ -69,7 +69,7 @@ export default {
       }
     },
     navigateToHeading(page, heading) {
-      window.location =  this.versionUrl + page.path + "#" + this.slugify(heading);
+      window.location = '/docs/' + page.version + page.path + "#" + this.slugify(heading);
     },
     slugify(heading) {
       return heading
